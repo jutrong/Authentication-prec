@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { isLoggedInState, login, userState } from "../atom";
+import { isLoggedInState, userState } from "../atom";
 import { useSetRecoilState } from "recoil";
+import { login } from "../api";
 
 const SignInContainer = styled.div``;
 const SignInForm = styled.form``;
