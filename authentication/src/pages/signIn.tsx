@@ -35,6 +35,7 @@ const SignIn = () => {
       const loggedInUser = await login(formData);
       setUser(loggedInUser);
       setIsLoggedIn(true);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

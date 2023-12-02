@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { isLoggedInState, userState } from "../atom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { signup } from "../api";
 
 const SignUpContainer = styled.div``;
@@ -20,7 +20,7 @@ const SignInPage = styled.button``;
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const setUser = useSetRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
   const setIsLoggedIn = useSetRecoilState(isLoggedInState);
   const [signUpData, setSignUpData] = useState({
     email: "",
