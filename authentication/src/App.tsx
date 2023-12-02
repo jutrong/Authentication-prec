@@ -1,12 +1,15 @@
 import React from "react";
 import { RecoilRoot } from "recoil";
-import Home from "./pages/home";
+import { RouterProvider } from "react-router-dom";
+import router from "./Router";
 
 function App() {
   return (
-    <RecoilRoot>
-      <Home />
-    </RecoilRoot>
+    <>
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
+    </>
   );
 }
 
