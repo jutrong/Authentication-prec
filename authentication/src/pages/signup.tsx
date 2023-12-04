@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { isLoggedInState, userState } from "../atom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { signup, updateProfile, updateUser } from "../api";
-import axios from "axios";
+import getUser from "../pages/home";
 
 const SignUpContainer = styled.div``;
 const SignUpForm = styled.form``;
@@ -48,6 +48,7 @@ const SignUp = () => {
         userId: new Date().getTime(),
       });
     }
+    console.log(user);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +58,7 @@ const SignUp = () => {
       setIsLoggedIn(true);
       navigate("/");
       await updateUser(user);
+      getUser();
     } catch (error) {
       console.log(error);
     }

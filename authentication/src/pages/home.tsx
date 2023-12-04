@@ -14,16 +14,18 @@ const Home = () => {
 
   useEffect(() => {
     getUser();
-    console.log(user);
-  }, []);
+    // console.log("userData", userData);
+    // console.log("user", user);
+  }, [user]);
 
   const getUser = async () => {
     try {
       const response = await axios.get(
-        `https://authentication-b53ec-default-rtdb.firebaseio.com/users/${user.userId}.json`
+        `https://authentication-b53ec-default-rtdb.firebaseio.com/users/${user?.userId}.json`
       );
       const data = response.data;
       setUserData(data);
+      console.log(response.data);
     } catch (error) {
       console.log("에러", error);
     }
@@ -35,6 +37,7 @@ const Home = () => {
         <>
           <div>displayName: {user.displayName}</div>
           <div>email: {user.email}</div>
+          <div>email: {user.userId}</div>
         </>
       )}
       <button

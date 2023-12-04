@@ -32,7 +32,7 @@ const SignIn = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const loggedInUser = await login(formData);
+      await login(formData);
       setIsLoggedIn(true);
       navigate("/");
     } catch (error) {
