@@ -1,48 +1,67 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { isLoggedInState, userState } from "../atom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { signup } from "../api";
+import { signup, updateProfile, updateUser } from "../api";
+import axios from "axios";
 
 const SignUpContainer = styled.div``;
 const SignUpForm = styled.form``;
 const SignUpEmailText = styled.p``;
 const SignUpEmailInput = styled.input``;
-// const SignUpUserText = styled.p``;
-// const SignUpUserInput = styled.input``;
+const SignUpUserText = styled.p``;
+const SignUpUserInput = styled.input``;
 const SignUpPsdText = styled.p``;
 const SignUpPsdInput = styled.input``;
-// const SignUpPsdConfirmText = styled.p``;
-// const SignUpPsdConfirmInput = styled.input``;
+const SignUpPsdConfirmText = styled.p``;
+const SignUpImgInput = styled.input`
+  display: none;
+`;
+const FileUploadBtn = styled.button``;
+const ProfileImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
 const SignUpBtn = styled.button``;
 const SignInPage = styled.button``;
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useRecoilState(userState);
   const setIsLoggedIn = useSetRecoilState(isLoggedInState);
   const [signUpData, setSignUpData] = useState({
     email: "",
-    // username: "",
     password: "",
-    // passwordComfirm: "",
   });
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setSignUpData({ ...signUpData, [name]: value });
+    if (name !== "displayName") setSignUpData({ ...signUpData, [name]: value });
+    if (name !== "password") {
+      setUser({
+        ...user,
+        [name]: value,
+        userId: new Date().getTime(),
+      });
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const loggedInUser = await signup(signUpData);
-      setUser(loggedInUser);
+      await signup(signUpData);
       setIsLoggedIn(true);
+      navigate("/");
+      await updateUser(user);
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <SignUpContainer>
       <SignUpForm onSubmit={handleSubmit}>
@@ -53,13 +72,13 @@ const SignUp = () => {
           value={signUpData.email}
           onChange={handleChange}
         ></SignUpEmailInput>
-        {/* <SignUpUserText>Username</SignUpUserText>
+        <SignUpUserText>Username</SignUpUserText>
         <SignUpUserInput
           type="text"
-          name="username"
-          value={signUpData.username}
+          name="displayName"
+          value={user.displayName}
           onChange={handleChange}
-        ></SignUpUserInput> */}
+        ></SignUpUserInput>
         <SignUpPsdText>Password</SignUpPsdText>
         <SignUpPsdInput
           type="password"
@@ -67,13 +86,8 @@ const SignUp = () => {
           value={signUpData.password}
           onChange={handleChange}
         ></SignUpPsdInput>
-        {/* <SignUpPsdConfirmText>Password Confirm</SignUpPsdConfirmText>
-        <SignUpPsdConfirmInput
-          type="password"
-          name="passwordComfirm"
-          value={signUpData.passwordComfirm}
-          onChange={handleChange}
-        ></SignUpPsdConfirmInput> */}
+        <SignUpPsdConfirmText>이미지 등록</SignUpPsdConfirmText>
+
         <SignUpBtn>Register</SignUpBtn>
       </SignUpForm>
       <SignInPage

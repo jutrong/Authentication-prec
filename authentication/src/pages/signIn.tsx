@@ -33,7 +33,6 @@ const SignIn = () => {
     event.preventDefault();
     try {
       const loggedInUser = await login(formData);
-      setUser(loggedInUser);
       setIsLoggedIn(true);
       navigate("/");
     } catch (error) {
@@ -41,7 +40,6 @@ const SignIn = () => {
     }
   };
 
-  console.log(formData);
   return (
     <SignInContainer>
       <SignInForm onSubmit={handleSubmit}>
