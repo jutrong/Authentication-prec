@@ -1,43 +1,28 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "../atom";
+import { useRecoilValue } from "recoil";
+import { userDataState } from "../atom";
+import styled from "styled-components";
+
+const ProfileImg = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: fill;
+`;
 
 const Home = () => {
-  const [userData, setUserData] = useState({
-    displayName: "",
-    email: "",
-  });
-  const [user, setUser] = useRecoilState(userState);
+  const userData = useRecoilValue(userDataState);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getUser();
-    // console.log("userData", userData);
-    // console.log("user", user);
-  }, [user]);
-
-  const getUser = async () => {
-    try {
-      const response = await axios.get(
-        `https://authentication-b53ec-default-rtdb.firebaseio.com/users/${user?.userId}.json`
-      );
-      const data = response.data;
-      setUserData(data);
-      console.log(response.data);
-    } catch (error) {
-      console.log("에러", error);
-    }
-  };
 
   return (
     <div>
-      {user && (
+      {userData && (
         <>
-          <div>displayName: {user.displayName}</div>
-          <div>email: {user.email}</div>
-          <div>email: {user.userId}</div>
+          <div>displayName: {userData.displayName}</div>
+          <div>email: {userData.email}</div>
+          <div>
+            ProfileImg :
+            <ProfileImg src={userData.userImage} alt="프로필 이미지" />
+          </div>
         </>
       )}
       <button

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { User } from "./atom";
 
 const BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts";
 
@@ -44,16 +45,27 @@ export const updateUser = async (formData: {
   email: string;
   displayName: string;
   userId: number;
+  userImage: string;
 }) => {
-  const { email, displayName, userId } = formData;
+  const { email, displayName, userId, userImage } = formData;
   await axios.put(
     `https://authentication-b53ec-default-rtdb.firebaseio.com/users/${userId}.json`,
-    { email, displayName }
+    { email, displayName, userImage }
   );
 
-  return { email, displayName, userId };
+  return { email, displayName, userId, userImage };
 };
-
+export const getUser = async (user: User) => {
+  try {
+    const response = await axios.get(
+      `https://authentication-b53ec-default-rtdb.firebaseio.com/users/${user?.userId}.json`
+    );
+    const { displayName, email, userImage } = response.data;
+    return { displayName, email, userImage };
+  } catch (error) {
+    console.log("에러", error);
+  }
+};
 export const logout = async () => {
   try {
     await axios.post(`"/api"`);
