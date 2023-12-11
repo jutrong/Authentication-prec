@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userDataState } from "../atom";
+import { userDataState, userState } from "../atom";
 import styled from "styled-components";
 
 const ProfileImg = styled.img`
@@ -11,17 +11,18 @@ const ProfileImg = styled.img`
 
 const Home = () => {
   const userData = useRecoilValue(userDataState);
+  const user = useRecoilValue(userState);
   const navigate = useNavigate();
-
+  console.log(userData);
   return (
     <div>
-      {userData && (
+      {user && (
         <>
-          <div>displayName: {userData.displayName}</div>
-          <div>email: {userData.email}</div>
+          <div>displayName: {user.displayName}</div>
+          <div>email: {user.email}</div>
           <div>
             ProfileImg :
-            <ProfileImg src={userData.userImage} alt="프로필 이미지" />
+            <ProfileImg src={user.userImage} alt="프로필 이미지" />
           </div>
         </>
       )}

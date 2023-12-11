@@ -42,6 +42,7 @@ const SignUp = () => {
   const [signUpData, setSignUpData] = useState({
     email: "",
     password: "",
+    passwordConfirm: "",
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,27 +71,26 @@ const SignUp = () => {
     }
   };
 
-  const onUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const fileList = e.target.files;
-      if (fileList && fileList[0]) {
-        const url = URL.createObjectURL(fileList[0]);
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const fileList = e.target.files;
+    if (fileList && fileList[0]) {
+      const url = URL.createObjectURL(fileList[0]);
 
-        setImageFile({
-          file: fileList[0],
-          thumbnail: url,
-        });
-        setUser({ ...user, userImage: url });
-      }
-    },
-    []
-  );
-  const onUploadImageButtonClick = useCallback(() => {
+      setImageFile({
+        file: fileList[0],
+        thumbnail: url,
+      });
+      setUser({ ...user, userImage: url });
+    }
+  };
+
+  const onUploadImageButtonClick = () => {
     if (!fileInputRef.current) {
       return;
     }
     fileInputRef.current.click();
-  }, []);
+  };
 
   return (
     <SignUpContainer>
@@ -116,6 +116,13 @@ const SignUp = () => {
           value={signUpData.password}
           onChange={handleChange}
         ></SignUpPsdInput>
+        <SignUpPsdText>PasswordConfirm</SignUpPsdText>
+        <SignUpPsdInput
+          type="password"
+          name="passwordConfirm"
+          value={signUpData.passwordConfirm}
+          onChange={handleChange}
+        ></SignUpPsdInput>
         <SignUpPsdConfirmText>이미지 등록</SignUpPsdConfirmText>
         <SignUpImgInput
           type="file"
@@ -127,7 +134,6 @@ const SignUp = () => {
           이미지 선택
         </FileUploadBtn>
         <ProfileImg src={imageFile?.thumbnail} alt="프로필 이미지" />
-
         <SignUpBtn>Register</SignUpBtn>
       </SignUpForm>
       <SignInPage
